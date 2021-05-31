@@ -26,7 +26,7 @@ def main():
 
     URL = "https://volby.cz/pls/ps2017nss/"
     header = False
-    scrap = requests.get(region_url)
+    scrap = requests.get(user_region)
     tool = BeautifulSoup(scrap.text, "html.parser")
     regions = tool.find_all("td", {"class": "cislo"})
 
@@ -55,3 +55,26 @@ def main():
     f.close()
     print("Process is now done!")
 
+def get_id_name(line, list):
+    list.append(line.find("a").string)
+    list.append(line.parent.find_all()[2].string)
+    return list
+
+def get_soup(URL, line):
+    region_url = requests.get(URL + line.find("a").attrs["href"])
+    return BeautifulSoup(region_url.text, "html.parser")
+
+def get_voters(region_results, list):
+    list.append(region_results.find("td", {"class": "cislo", "headers": "sa2"}).string)
+    list.append(region_results.find("td", {"class": "cislo", "headers": "sa3"}).string)
+    list.append(region_results.find("td", {"class": "cislo", "headers": "sa6"}).string)
+    return list
+
+def get_party_votes(parties, list):
+    for line in parties:
+        if not line.find("th"):
+            list.append(line.find_all("td", {"class": "cislo"})[1].string)
+    return list
+
+if __name__ == '__main__':
+    sys.exit(main())
