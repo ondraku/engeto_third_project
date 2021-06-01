@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 SEPARATOR = "=" * 70
+URL = "https://volby.cz/pls/ps2017nss/"
 
 def main():
     print(SEPARATOR)
@@ -18,13 +19,12 @@ def main():
     )
     print(SEPARATOR)
     user_region = input("Please copy the URL and paste it here: ")
-    file_name = input("Please choose a name for the file - without suffix please: ")
+    file_name = input("Please choose a name for the file: ")
     print(SEPARATOR)
 
     f = open(file_name + ".csv", mode="w")
     f_writer = csv.writer(f, delimiter=";")
 
-    URL = "https://volby.cz/pls/ps2017nss/"
     header = False
     scrap = requests.get(user_region)
     tool = BeautifulSoup(scrap.text, "html.parser")
@@ -54,6 +54,8 @@ def main():
 
     f.close()
     print("Process is now done!")
+    print(f"Your file {file_name}.csv is ready for checking.")
+    print("Thank you for using the Elections Scraper app!")
 
 def get_id_name(line, list):
     list.append(line.find("a").string)
