@@ -62,7 +62,7 @@ def get_link():
     if "https://volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=" in link and "&xnumnuts=" in link:
         return link
     else:
-        print("You have enter different URL. Please try again.")
+        print("You have entered different URL. Please try again.")
         quit()
 
 def get_name():
