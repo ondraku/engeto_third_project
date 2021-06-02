@@ -18,15 +18,15 @@ def main():
     """
     )
     print(SEPARATOR)
-    user_region = input("Please copy the URL and paste it here: ")
-    file_name = input("Please choose a name for the file: ")
+    link = get_link()
+    file_name = get_name()
     print(SEPARATOR)
 
     f = open(file_name + ".csv", mode="w")
     f_writer = csv.writer(f, delimiter=";")
 
     header = False
-    scrap = requests.get(user_region)
+    scrap = requests.get(link)
     tool = BeautifulSoup(scrap.text, "html.parser")
     regions = tool.find_all("td", {"class": "cislo"})
 
@@ -56,6 +56,24 @@ def main():
     print("Process is now done!")
     print(f"Your file {file_name}.csv is ready for checking.")
     print("Thank you for using the Elections Scraper app!")
+
+def get_link():
+    link = input("Please copy the URL and paste it here: ")
+    if "https://volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=" in link and "&xnumnuts=" in link:
+        return link
+    else:
+        print("You have enter different URL. Please try again.")
+        quit()
+
+def get_name():
+    name = input("Please choose a name for the file: ")
+    if ".csv" not in name:
+        print(SEPARATOR)
+        print("Exporting...please wait!")
+        return name
+    else:
+        print("Please name the file without the suffix.")
+        quit()
 
 def get_id_name(line, list):
     list.append(line.find("a").string)
